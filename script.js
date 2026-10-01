@@ -4,6 +4,12 @@ let products =
 let sales =
     JSON.parse(localStorage.getItem("sales")) || [];
 
+let expenses =
+    JSON.parse(localStorage.getItem("expenses")) || [];
+
+let loans =
+    JSON.parse(localStorage.getItem("loans")) || [];
+
 
 function saveData() {
 
@@ -17,6 +23,16 @@ function saveData() {
         JSON.stringify(sales)
     );
 
+    localStorage.setItem(
+        "expenses",
+        JSON.stringify(expenses)
+    );
+
+    localStorage.setItem(
+        "loans",
+        JSON.stringify(loans)
+    );
+
 }
 
 
@@ -26,9 +42,7 @@ function showPage(pageName) {
         document.querySelectorAll(".page");
 
     pages.forEach(function(page) {
-
         page.style.display = "none";
-
     });
 
     document.getElementById(pageName).style.display = "block";
@@ -65,34 +79,78 @@ function addProduct() {
         );
 
         return;
-
     }
 
 
     products.push({
-
         name: name,
         price: price,
         stock: stock
-
     });
 
 
     saveData();
 
-
     document.getElementById("productName").value = "";
-
     document.getElementById("productPrice").value = "";
-
     document.getElementById("productStock").value = "";
 
+    updateDisplay();
+
+    alert("Product added successfully!");
+
+}
+
+
+function restockProduct() {
+
+    let productIndex =
+        document.getElementById(
+            "restockProduct"
+        ).value;
+
+    let quantity =
+        Number(
+            document.getElementById(
+                "restockQuantity"
+            ).value
+        );
+
+
+    if (
+        productIndex === "" ||
+        quantity <= 0
+    ) {
+
+        alert(
+            "Please select a product and enter a valid quantity."
+        );
+
+        return;
+    }
+
+
+    let product =
+        products[productIndex];
+
+
+    product.stock += quantity;
+
+
+    saveData();
+
+    document.getElementById(
+        "restockQuantity"
+    ).value = "";
 
     updateDisplay();
 
 
     alert(
-        "Product added successfully!"
+        product.name +
+        " restocked successfully!\n" +
+        "New stock: " +
+        product.stock
     );
 
 }
@@ -101,11 +159,15 @@ function addProduct() {
 function recordSale() {
 
     let productIndex =
-        document.getElementById("saleProduct").value;
+        document.getElementById(
+            "saleProduct"
+        ).value;
 
     let quantity =
         Number(
-            document.getElementById("saleQuantity").value
+            document.getElementById(
+                "saleQuantity"
+            ).value
         );
 
 
@@ -119,7 +181,6 @@ function recordSale() {
         );
 
         return;
-
     }
 
 
@@ -134,7 +195,6 @@ function recordSale() {
         );
 
         return;
-
     }
 
 
@@ -177,64 +237,6 @@ function recordSale() {
 }
 
 
-function restockProduct() {
-
-    let productIndex =
-        document.getElementById(
-            "restockProduct"
-        ).value;
-
-
-    let quantity =
-        Number(
-            document.getElementById(
-                "restockQuantity"
-            ).value
-        );
-
-
-    if (
-        productIndex === "" ||
-        quantity <= 0
-    ) {
-
-        alert(
-            "Please select a product and enter a valid quantity."
-        );
-
-        return;
-
-    }
-
-
-    let product =
-        products[productIndex];
-
-
-    product.stock += quantity;
-
-
-    saveData();
-
-
-    document.getElementById(
-        "restockQuantity"
-    ).value = "";
-
-
-    updateDisplay();
-
-
-    alert(
-        product.name +
-        " restocked successfully!\n" +
-        "New stock: " +
-        product.stock
-    );
-
-}
-
-
 function editProduct(index) {
 
     let product =
@@ -247,10 +249,7 @@ function editProduct(index) {
             product.name
         );
 
-
-    if (newName === null) {
-        return;
-    }
+    if (newName === null) return;
 
 
     let newPrice =
@@ -259,10 +258,7 @@ function editProduct(index) {
             product.price
         );
 
-
-    if (newPrice === null) {
-        return;
-    }
+    if (newPrice === null) return;
 
 
     let newStock =
@@ -271,17 +267,11 @@ function editProduct(index) {
             product.stock
         );
 
-
-    if (newStock === null) {
-        return;
-    }
+    if (newStock === null) return;
 
 
-    newPrice =
-        Number(newPrice);
-
-    newStock =
-        Number(newStock);
+    newPrice = Number(newPrice);
+    newStock = Number(newStock);
 
 
     if (
@@ -295,7 +285,6 @@ function editProduct(index) {
         );
 
         return;
-
     }
 
 
@@ -310,7 +299,6 @@ function editProduct(index) {
 
 
     saveData();
-
     updateDisplay();
 
 
@@ -335,16 +323,13 @@ function deleteProduct(index) {
         );
 
 
-    if (!confirmDelete) {
-        return;
-    }
+    if (!confirmDelete) return;
 
 
     products.splice(index, 1);
 
 
     saveData();
-
     updateDisplay();
 
 
@@ -389,8 +374,7 @@ function searchProducts() {
 
             rows[i].style.display = "";
 
-        }
-        else {
+        } else {
 
             rows[i].style.display = "none";
 
@@ -401,7 +385,245 @@ function searchProducts() {
 }
 
 
+/* =========================
+   EXPENSE FUNCTIONS
+========================= */
+
+function addExpense() {
+
+    let description =
+        document
+            .getElementById("expenseDescription")
+            .value
+            .trim();
+
+
+    let category =
+        document
+            .getElementById("expenseCategory")
+            .value
+            .trim();
+
+
+    let amount =
+        Number(
+            document.getElementById(
+                "expenseAmount"
+            ).value
+        );
+
+
+    if (
+        description === "" ||
+        category === "" ||
+        amount <= 0
+    ) {
+
+        alert(
+            "Please enter valid expense information."
+        );
+
+        return;
+    }
+
+
+    expenses.push({
+
+        date: new Date().toLocaleString(),
+
+        description: description,
+
+        category: category,
+
+        amount: amount
+
+    });
+
+
+    saveData();
+
+
+    document.getElementById(
+        "expenseDescription"
+    ).value = "";
+
+    document.getElementById(
+        "expenseCategory"
+    ).value = "";
+
+    document.getElementById(
+        "expenseAmount"
+    ).value = "";
+
+
+    updateDisplay();
+
+
+    alert(
+        "Expense recorded successfully!"
+    );
+
+}
+
+
+function deleteExpense(index) {
+
+    let confirmDelete =
+        confirm(
+            "Delete this expense record?"
+        );
+
+
+    if (!confirmDelete) return;
+
+
+    expenses.splice(index, 1);
+
+    saveData();
+
+    updateDisplay();
+
+}
+
+
+/* =========================
+   LOAN FUNCTIONS
+========================= */
+
+function addLoan() {
+
+    let person =
+        document
+            .getElementById("loanPerson")
+            .value
+            .trim();
+
+
+    let amount =
+        Number(
+            document.getElementById(
+                "loanAmount"
+            ).value
+        );
+
+
+    let dueDate =
+        document.getElementById(
+            "loanDueDate"
+        ).value;
+
+
+    let type =
+        document.getElementById(
+            "loanType"
+        ).value;
+
+
+    if (
+        person === "" ||
+        amount <= 0 ||
+        dueDate === "" ||
+        type === ""
+    ) {
+
+        alert(
+            "Please complete all loan information."
+        );
+
+        return;
+    }
+
+
+    loans.push({
+
+        date: new Date().toLocaleDateString(),
+
+        person: person,
+
+        type: type,
+
+        amount: amount,
+
+        dueDate: dueDate,
+
+        status: "Unpaid"
+
+    });
+
+
+    saveData();
+
+
+    document.getElementById(
+        "loanPerson"
+    ).value = "";
+
+    document.getElementById(
+        "loanAmount"
+    ).value = "";
+
+    document.getElementById(
+        "loanDueDate"
+    ).value = "";
+
+    document.getElementById(
+        "loanType"
+    ).value = "";
+
+
+    updateDisplay();
+
+
+    alert(
+        "Loan record added successfully!"
+    );
+
+}
+
+
+function markLoanPaid(index) {
+
+    loans[index].status = "Paid";
+
+    saveData();
+
+    updateDisplay();
+
+
+    alert(
+        "Loan marked as paid!"
+    );
+
+}
+
+
+function deleteLoan(index) {
+
+    let confirmDelete =
+        confirm(
+            "Delete this loan record?"
+        );
+
+
+    if (!confirmDelete) return;
+
+
+    loans.splice(index, 1);
+
+    saveData();
+
+    updateDisplay();
+
+}
+
+
+/* =========================
+   UPDATE DISPLAY
+========================= */
+
 function updateDisplay() {
+
+    /* PRODUCTS */
 
     let productTable =
         document.getElementById(
@@ -426,9 +648,7 @@ function updateDisplay() {
                 status =
                     "Out of Stock";
 
-            }
-
-            else if (
+            } else if (
                 product.stock <= 5
             ) {
 
@@ -482,6 +702,8 @@ function updateDisplay() {
     );
 
 
+    /* SALE PRODUCT DROPDOWN */
+
     let saleProduct =
         document.getElementById(
             "saleProduct"
@@ -510,6 +732,8 @@ function updateDisplay() {
     );
 
 
+    /* RESTOCK DROPDOWN */
+
     let restockProduct =
         document.getElementById(
             "restockProduct"
@@ -537,6 +761,8 @@ function updateDisplay() {
         }
     );
 
+
+    /* SALES HISTORY */
 
     let salesTable =
         document.getElementById(
@@ -578,6 +804,145 @@ function updateDisplay() {
     );
 
 
+    /* EXPENSE HISTORY */
+
+    let expenseTable =
+        document.getElementById(
+            "expenseTable"
+        );
+
+
+    expenseTable.innerHTML = "";
+
+
+    expenses.forEach(
+        function(expense, index) {
+
+            expenseTable.innerHTML += `
+
+                <tr>
+
+                    <td>
+                        ${expense.date}
+                    </td>
+
+                    <td>
+                        ${expense.description}
+                    </td>
+
+                    <td>
+                        ${expense.category}
+                    </td>
+
+                    <td>
+                        ₱${expense.amount.toFixed(2)}
+                    </td>
+
+                    <td>
+
+                        <button
+                            onclick="deleteExpense(${index})"
+                        >
+                            Delete
+                        </button>
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        }
+    );
+
+
+    /* LOAN HISTORY */
+
+    let loanTable =
+        document.getElementById(
+            "loanTable"
+        );
+
+
+    loanTable.innerHTML = "";
+
+
+    loans.forEach(
+        function(loan, index) {
+
+            let actionButton = "";
+
+
+            if (
+                loan.status === "Unpaid"
+            ) {
+
+                actionButton = `
+
+                    <button
+                        onclick="markLoanPaid(${index})"
+                    >
+                        Mark Paid
+                    </button>
+
+                `;
+
+            }
+
+
+            actionButton += `
+
+                <button
+                    onclick="deleteLoan(${index})"
+                >
+                    Delete
+                </button>
+
+            `;
+
+
+            loanTable.innerHTML += `
+
+                <tr>
+
+                    <td>
+                        ${loan.date}
+                    </td>
+
+                    <td>
+                        ${loan.person}
+                    </td>
+
+                    <td>
+                        ${loan.type}
+                    </td>
+
+                    <td>
+                        ₱${loan.amount.toFixed(2)}
+                    </td>
+
+                    <td>
+                        ${loan.dueDate}
+                    </td>
+
+                    <td>
+                        ${loan.status}
+                    </td>
+
+                    <td>
+                        ${actionButton}
+                    </td>
+
+                </tr>
+
+            `;
+
+        }
+    );
+
+
+    /* DASHBOARD CALCULATIONS */
+
     let totalProducts =
         products.length;
 
@@ -606,6 +971,29 @@ function updateDisplay() {
         );
 
 
+    let totalExpenses =
+        expenses.reduce(
+            (sum, expense) =>
+                sum + expense.amount,
+            0
+        );
+
+
+    let totalLoans =
+        loans
+            .filter(
+                loan =>
+                    loan.status === "Unpaid"
+            )
+            .reduce(
+                (sum, loan) =>
+                    sum + loan.amount,
+                0
+            );
+
+
+    /* DASHBOARD DISPLAY */
+
     document.getElementById(
         "totalProducts"
     ).textContent =
@@ -629,6 +1017,36 @@ function updateDisplay() {
     ).textContent =
         "₱" +
         totalSales.toFixed(2);
+
+
+    document.getElementById(
+        "totalExpenses"
+    ).textContent =
+        "₱" +
+        totalExpenses.toFixed(2);
+
+
+    document.getElementById(
+        "totalLoans"
+    ).textContent =
+        "₱" +
+        totalLoans.toFixed(2);
+
+
+    /* EXPENSE TOTAL */
+
+    document.getElementById(
+        "expenseTotal"
+    ).textContent =
+        totalExpenses.toFixed(2);
+
+
+    /* LOAN TOTAL */
+
+    document.getElementById(
+        "loanTotal"
+    ).textContent =
+        totalLoans.toFixed(2);
 
 }
 
