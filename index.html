@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Student Inventory Management System</title>
     <link rel="stylesheet" href="style.css">
@@ -23,9 +24,11 @@
 
         <!-- DASHBOARD -->
         <section id="dashboard" class="page">
+
             <h2>Dashboard</h2>
 
             <div class="cards">
+
                 <div class="card">
                     <h3>Total Products</h3>
                     <p id="totalProducts">0</p>
@@ -45,57 +48,114 @@
                     <h3>Total Sales</h3>
                     <p id="totalSales">₱0.00</p>
                 </div>
+
             </div>
+
         </section>
 
 
         <!-- PRODUCTS -->
         <section id="products" class="page" style="display:none;">
+
             <h2>Products</h2>
 
+            <!-- SEARCH -->
             <div class="form">
-                <input type="text" id="productName" placeholder="Product name">
-                <input type="number" id="productPrice" placeholder="Price">
-                <input type="number" id="productStock" placeholder="Starting stock">
 
-                <button onclick="addProduct()">Add Product</button>
+                <input
+                    type="text"
+                    id="searchProduct"
+                    placeholder="Search product..."
+                    onkeyup="searchProducts()"
+                >
+
             </div>
 
+
+            <!-- ADD PRODUCT -->
             <div class="form">
-    <select id="restockProduct">
-        <option value="">Select Product</option>
-    </select>
 
-    <input
-        type="number"
-        id="restockQuantity"
-        placeholder="Quantity to add"
-        min="1"
-    >
+                <input
+                    type="text"
+                    id="productName"
+                    placeholder="Product name"
+                >
 
-    <button onclick="restockProduct()">Add Stock</button>
-</div>
+                <input
+                    type="number"
+                    id="productPrice"
+                    placeholder="Price"
+                >
+
+                <input
+                    type="number"
+                    id="productStock"
+                    placeholder="Starting stock"
+                >
+
+                <button onclick="addProduct()">
+                    Add Product
+                </button>
+
+            </div>
+
+
+            <!-- RESTOCK -->
+            <div class="form">
+
+                <select id="restockProduct">
+
+                    <option value="">
+                        Select Product
+                    </option>
+
+                </select>
+
+                <input
+                    type="number"
+                    id="restockQuantity"
+                    placeholder="Quantity to add"
+                    min="1"
+                >
+
+                <button onclick="restockProduct()">
+                    Add Stock
+                </button>
+
+            </div>
+
+
+            <!-- PRODUCT TABLE -->
             <table>
+
                 <thead>
+
                     <tr>
+
                         <th>Product</th>
                         <th>Price</th>
                         <th>Stock</th>
                         <th>Status</th>
                         <th>Actions</th>
+
                     </tr>
+
                 </thead>
 
                 <tbody id="productTable"></tbody>
+
             </table>
+
         </section>
 
 
         <!-- RECORD SALE -->
         <section id="sales" class="page" style="display:none;">
+
             <h2>Record Sale</h2>
 
             <div class="form">
+
                 <select id="saleProduct"></select>
 
                 <input
@@ -105,48 +165,75 @@
                     min="1"
                 >
 
-                <button onclick="recordSale()">Record Sale</button>
+                <button onclick="recordSale()">
+                    Record Sale
+                </button>
+
             </div>
+
 
             <h3>Current Transaction</h3>
 
             <table>
+
                 <thead>
+
                     <tr>
+
                         <th>Product</th>
                         <th>Quantity</th>
                         <th>Subtotal</th>
+
                     </tr>
+
                 </thead>
 
                 <tbody id="transactionTable"></tbody>
+
             </table>
 
-            <h3>Total: ₱<span id="transactionTotal">0.00</span></h3>
+
+            <h3>
+                Total: ₱
+                <span id="transactionTotal">
+                    0.00
+                </span>
+            </h3>
+
         </section>
 
 
         <!-- SALES HISTORY -->
         <section id="history" class="page" style="display:none;">
+
             <h2>Sales History</h2>
 
             <table>
+
                 <thead>
+
                     <tr>
+
                         <th>Date</th>
                         <th>Product</th>
                         <th>Quantity</th>
                         <th>Total</th>
+
                     </tr>
+
                 </thead>
 
                 <tbody id="salesTable"></tbody>
+
             </table>
+
         </section>
 
     </main>
 
+
     <script src="script.js"></script>
 
 </body>
+
 </html>
