@@ -125,7 +125,7 @@ function updateDisplay() {
 
     productTable.innerHTML = "";
 
-    products.forEach(function(product) {
+    products.forEach(function(product, index) {
 
         let status = "Available";
 
@@ -142,6 +142,10 @@ function updateDisplay() {
                 <td>₱${product.price.toFixed(2)}</td>
                 <td>${product.stock}</td>
                 <td>${status}</td>
+                <td>
+                    <button onclick="editProduct(${index})">Edit</button>
+                    <button onclick="deleteProduct(${index})">Delete</button>
+                </td>
             </tr>
         `;
     });
@@ -223,6 +227,55 @@ products.forEach(function(product, index) {
 
     document.getElementById("totalSales").textContent =
         "₱" + totalSales.toFixed(2);
+}
+
+function editProduct(index) {
+
+    let product = products[index];
+
+    let newName = prompt("Enter new product name:", product.name);
+    if (newName === null) return;
+
+    let newPrice = prompt("Enter new price:", product.price);
+    if (newPrice === null) return;
+
+    let newStock = prompt("Enter new stock:", product.stock);
+    if (newStock === null) return;
+
+    newPrice = Number(newPrice);
+    newStock = Number(newStock);
+
+    if (newName.trim() === "" || newPrice <= 0 || newStock < 0) {
+        alert("Please enter valid information.");
+        return;
+    }
+
+    product.name = newName.trim();
+    product.price = newPrice;
+    product.stock = newStock;
+
+    saveData();
+    updateDisplay();
+
+    alert("Product updated successfully!");
+}
+
+
+function deleteProduct(index) {
+
+    let product = products[index];
+
+    let confirmDelete =
+        confirm("Are you sure you want to delete " + product.name + "?");
+
+    if (!confirmDelete) return;
+
+    products.splice(index, 1);
+
+    saveData();
+    updateDisplay();
+
+    alert("Product deleted successfully!");
 }
 
 updateDisplay();
