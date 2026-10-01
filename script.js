@@ -89,6 +89,35 @@ function recordSale() {
     );
 }
 
+function restockProduct() {
+
+    let productIndex =
+        document.getElementById("restockProduct").value;
+
+    let quantity =
+        Number(document.getElementById("restockQuantity").value);
+
+    if (productIndex === "" || quantity <= 0) {
+        alert("Please select a product and enter a valid quantity.");
+        return;
+    }
+
+    let product = products[productIndex];
+
+    product.stock += quantity;
+
+    saveData();
+
+    document.getElementById("restockQuantity").value = "";
+
+    updateDisplay();
+
+    alert(
+        product.name + " restocked successfully!\n" +
+        "New stock: " + product.stock
+    );
+}
+
 function updateDisplay() {
 
     let productTable =
@@ -134,6 +163,21 @@ function updateDisplay() {
     });
 
 
+    let restockProduct =
+    document.getElementById("restockProduct");
+
+restockProduct.innerHTML =
+    '<option value="">Select Product</option>';
+
+products.forEach(function(product, index) {
+
+    restockProduct.innerHTML += `
+        <option value="${index}">
+            ${product.name} - ₱${product.price}
+        </option>
+    `;
+});
+    
     let salesTable =
         document.getElementById("salesTable");
 
