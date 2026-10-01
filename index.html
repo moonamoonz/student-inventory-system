@@ -61,6 +61,20 @@
                 <button onclick="addProduct()">Add Product</button>
             </div>
 
+            <div class="form">
+    <select id="restockProduct">
+        <option value="">Select Product</option>
+    </select>
+
+    <input
+        type="number"
+        id="restockQuantity"
+        placeholder="Quantity to add"
+        min="1"
+    >
+
+    <button onclick="restockProduct()">Add Stock</button>
+</div>
             <table>
                 <thead>
                     <tr>
