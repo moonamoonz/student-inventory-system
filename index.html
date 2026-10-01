@@ -18,6 +18,8 @@
         <button onclick="showPage('products')">Products</button>
         <button onclick="showPage('sales')">Record Sale</button>
         <button onclick="showPage('history')">Sales History</button>
+        <button onclick="showPage('expenses')">Expenses</button>
+        <button onclick="showPage('loans')">Loans</button>
     </nav>
 
     <main>
@@ -47,6 +49,16 @@
                 <div class="card">
                     <h3>Total Sales</h3>
                     <p id="totalSales">₱0.00</p>
+                </div>
+
+                <div class="card">
+                    <h3>Total Expenses</h3>
+                    <p id="totalExpenses">₱0.00</p>
+                </div>
+
+                <div class="card">
+                    <h3>Total Loans</h3>
+                    <p id="totalLoans">₱0.00</p>
                 </div>
 
             </div>
@@ -85,12 +97,15 @@
                     type="number"
                     id="productPrice"
                     placeholder="Price"
+                    min="0"
+                    step="0.01"
                 >
 
                 <input
                     type="number"
                     id="productStock"
                     placeholder="Starting stock"
+                    min="0"
                 >
 
                 <button onclick="addProduct()">
@@ -131,13 +146,11 @@
                 <thead>
 
                     <tr>
-
                         <th>Product</th>
                         <th>Price</th>
                         <th>Stock</th>
                         <th>Status</th>
                         <th>Actions</th>
-
                     </tr>
 
                 </thead>
@@ -179,11 +192,9 @@
                 <thead>
 
                     <tr>
-
                         <th>Product</th>
                         <th>Quantity</th>
                         <th>Subtotal</th>
-
                     </tr>
 
                 </thead>
@@ -192,12 +203,8 @@
 
             </table>
 
-
             <h3>
-                Total: ₱
-                <span id="transactionTotal">
-                    0.00
-                </span>
+                Total: ₱<span id="transactionTotal">0.00</span>
             </h3>
 
         </section>
@@ -213,17 +220,154 @@
                 <thead>
 
                     <tr>
-
                         <th>Date</th>
                         <th>Product</th>
                         <th>Quantity</th>
                         <th>Total</th>
-
                     </tr>
 
                 </thead>
 
                 <tbody id="salesTable"></tbody>
+
+            </table>
+
+        </section>
+
+
+        <!-- EXPENSES -->
+        <section id="expenses" class="page" style="display:none;">
+
+            <h2>Expense Records</h2>
+
+            <div class="form">
+
+                <input
+                    type="text"
+                    id="expenseDescription"
+                    placeholder="Expense description"
+                >
+
+                <input
+                    type="text"
+                    id="expenseCategory"
+                    placeholder="Category"
+                >
+
+                <input
+                    type="number"
+                    id="expenseAmount"
+                    placeholder="Amount"
+                    min="0"
+                    step="0.01"
+                >
+
+                <button onclick="addExpense()">
+                    Add Expense
+                </button>
+
+            </div>
+
+
+            <h3>
+                Total Expenses:
+                ₱<span id="expenseTotal">0.00</span>
+            </h3>
+
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Date</th>
+                        <th>Description</th>
+                        <th>Category</th>
+                        <th>Amount</th>
+                        <th>Action</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="expenseTable"></tbody>
+
+            </table>
+
+        </section>
+
+
+        <!-- LOANS -->
+        <section id="loans" class="page" style="display:none;">
+
+            <h2>Loan Records</h2>
+
+            <div class="form">
+
+                <input
+                    type="text"
+                    id="loanPerson"
+                    placeholder="Borrower/Lender"
+                >
+
+                <input
+                    type="number"
+                    id="loanAmount"
+                    placeholder="Amount"
+                    min="0"
+                    step="0.01"
+                >
+
+                <input
+                    type="date"
+                    id="loanDueDate"
+                >
+
+                <select id="loanType">
+
+                    <option value="">
+                        Select Type
+                    </option>
+
+                    <option value="Borrowed">
+                        Borrowed
+                    </option>
+
+                    <option value="Lent">
+                        Lent
+                    </option>
+
+                </select>
+
+                <button onclick="addLoan()">
+                    Add Loan
+                </button>
+
+            </div>
+
+
+            <h3>
+                Total Loans:
+                ₱<span id="loanTotal">0.00</span>
+            </h3>
+
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Date</th>
+                        <th>Person</th>
+                        <th>Type</th>
+                        <th>Amount</th>
+                        <th>Due Date</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="loanTable"></tbody>
 
             </table>
 
